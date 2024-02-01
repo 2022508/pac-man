@@ -160,7 +160,7 @@ namespace pac_man
             if (e == Keys.Enter)
             {
                 NameHasBeenEntered();
-                e.SuppressKeyPress = true;
+                //e.SuppressKeyPress = true;
             }
 
         }

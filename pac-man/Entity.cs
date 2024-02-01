@@ -104,22 +104,19 @@ namespace pac_man
         {
             if (pbPACMAN.Bounds.IntersectsWith(pbGhost1.Bounds) || pbPACMAN.Bounds.IntersectsWith(pbGhost2.Bounds))
             {
-                pbPACMAN.Left = 634;
-                pbPACMAN.Top = 324;
+                pbPACMAN.Location = new Point(437, 193);
                 moveUp = false;
                 moveDown = false;
                 moveLeft = false;
                 moveRight = false;
 
-                pbGhost1.Left = 448;
-                pbGhost1.Top = 170;
+                pbGhost1.Location = new Point(314, 101);   
                 moveUp = false;
                 moveDown = false;
                 moveLeft = false;
                 moveRight = false;
 
-                pbGhost2.Left = 803;
-                pbGhost2.Top = 170;
+                pbGhost2.Location = new Point(565, 101);
                 moveUp = false;
                 moveDown = false;
                 moveLeft = false;
