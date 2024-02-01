@@ -1,0 +1,1023 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Reflection.Emit;
+using System.Runtime.ConstrainedExecution;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+
+namespace pac_man
+{
+    public partial class Game : Form
+    {
+        Image up, down, left, right, temp;
+        bool moveUp, moveDown, moveLeft, moveRight;
+        int score = 0;
+
+
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            ToggleMovement(2);
+            lblScoreDisplay.Text = score++.ToString();
+            Walls();
+        }
+
+
+        private void Game_KeyDown(object sender, KeyEventArgs e)
+        {
+            MovementTrueOrFalse(e.KeyCode);
+        }
+
+        //16 label for walls
+        public Game()
+        {
+            InitializeComponent();
+
+            timer1.Stop();
+            Name name = new Name();
+            name.ShowDialog();
+            lblNameDisplay.Text = name.GetName();
+            timer1.Start();
+
+            //for (int i = 1; i < 16; i++) //need to add labels to list to bound them, 16 labels
+            //{
+            //    string labelNumber = "label" + i;
+
+            //    labels.Add(labelNumber);
+            //}
+
+
+
+
+
+
+            //for each(control ctr in $groupBox1.controls)
+            // {
+            //    if (ctr is Label)
+            //    {
+            //        labels.add(ctr);
+            //    }
+            //}
+
+
+            //Name name = new Name();
+            //lblNameDisplay.Text = name.GetName();
+
+
+
+            //direction = pbPACMAN.down;
+
+
+            //up = Image.FromFile("");
+            //down = Image.FromFile("");
+            //left = Image.FromFile("");
+            //right = Image.FromFile("");
+
+            //temp = Image.FromFile("Home/title5.png");
+
+            //pbPACMAN.Image = temp;
+
+
+
+
+
+        }
+
+        void MovementTrueOrFalse(Keys move)
+        {
+            if (move == Keys.Up)
+            {
+                moveUp = true;
+                moveDown = false;
+                moveLeft = false;
+                moveRight = false;
+            }
+            if (move == Keys.Down)
+            {
+                moveUp = false;
+                moveDown = true;
+                moveLeft = false;
+                moveRight = false;
+            }
+            if (move == Keys.Left)
+            {
+                moveUp = false;
+                moveDown = false;
+                moveLeft = true;
+                moveRight = false;
+            }
+            if (move == Keys.Right)
+            {
+                moveUp = false;
+                moveDown = false;
+                moveLeft = false;
+                moveRight = true;
+            }
+        }
+
+        void ToggleMovement(int speed)
+        {
+            if (moveUp == true)
+            {
+                pbPACMAN.Top -= speed;
+            }
+            if (moveDown == true)
+            {
+                pbPACMAN.Top += speed;
+            }
+            if (moveLeft == true)
+            {
+                pbPACMAN.Left -= speed;
+            }
+            if (moveRight == true)
+            {
+                pbPACMAN.Left += speed;
+            }
+        }
+        void Walls()
+        {
+            //foreach (string label in labels)
+            //{
+            //    if (pbPACMAN.Bounds.IntersectsWith(label.Bounds))
+            //    {
+
+            //    }
+            //}
+
+            //if(pbPACMAN.Bounds.IntersectsWith(label1.Bounds) ||   //initial method of stopping when hitting walls, but you would get stuck.
+            //pbPACMAN.Bounds.IntersectsWith(label2.Bounds) ||
+            //pbPACMAN.Bounds.IntersectsWith(label3.Bounds) ||
+            //pbPACMAN.Bounds.IntersectsWith(label4.Bounds) ||      
+            //pbPACMAN.Bounds.IntersectsWith(label5.Bounds) ||
+            //pbPACMAN.Bounds.IntersectsWith(label6.Bounds) ||
+            //pbPACMAN.Bounds.IntersectsWith(label7.Bounds) ||
+            //pbPACMAN.Bounds.IntersectsWith(label8.Bounds) ||
+            //pbPACMAN.Bounds.IntersectsWith(label9.Bounds) ||
+            //pbPACMAN.Bounds.IntersectsWith(label10.Bounds) ||
+            //pbPACMAN.Bounds.IntersectsWith(label11.Bounds) ||
+            //pbPACMAN.Bounds.IntersectsWith(label12.Bounds) ||
+            //pbPACMAN.Bounds.IntersectsWith(label13.Bounds) ||
+            //pbPACMAN.Bounds.IntersectsWith(label14.Bounds) ||
+            //pbPACMAN.Bounds.IntersectsWith(label15.Bounds) ||
+            //pbPACMAN.Bounds.IntersectsWith(label16.Bounds))
+            //{
+            //    moveUp = false;
+            //    moveDown = false;
+            //    moveLeft = false;
+            //    moveRight = false;
+            //}
+
+            //label1
+            if (pbPACMAN.Bounds.IntersectsWith(label1.Bounds))
+            { 
+                pbPACMAN.Top += 2;        //for bottom collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                }
+            }
+
+            //label2
+            if (pbPACMAN.Bounds.IntersectsWith(label2.Bounds))
+            {
+                pbPACMAN.Top -= 2;        //for top collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                }
+            }
+
+            //label3
+            if (pbPACMAN.Bounds.IntersectsWith(label3.Bounds))
+            {
+                pbPACMAN.Left += 2;       //for right collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = true; moveDown = false; moveLeft = false; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = true; moveLeft = false; moveRight = false;
+                }
+            }
+
+            //label4
+            if (pbPACMAN.Bounds.IntersectsWith(label4.Bounds))
+            {
+                pbPACMAN.Left -= 2;       //for left collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = true; moveDown = false; moveLeft = false; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = true; moveLeft = false; moveRight = false;
+                }
+            }
+
+
+
+            //label5
+            if (pbPACMAN.Bounds.IntersectsWith(label5.Bounds) && moveDown == true)
+            {
+                pbPACMAN.Top -= 2;        //for top collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label5.Bounds) && moveUp == true)
+            {
+                pbPACMAN.Top += 2;        //for bottom collision
+                moveUp = false;
+                moveDown = false;
+                moveLeft = false;
+                moveRight = false;
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label5.Bounds) && moveRight == true)
+            {
+                pbPACMAN.Left -= 2;       //for left collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = true; moveDown = false; moveLeft = false; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = true; moveLeft = false; moveRight = false;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label5.Bounds) && moveLeft == true)
+            {
+                pbPACMAN.Left += 2;       //for right collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = true; moveDown = false; moveLeft = false; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = true; moveLeft = false; moveRight = false;
+                }
+            }
+
+
+
+            //label6
+            if (pbPACMAN.Bounds.IntersectsWith(label6.Bounds) && moveDown == true)
+            {
+                pbPACMAN.Top -= 2;        //for top collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label6.Bounds) && moveUp == true)
+            {
+                pbPACMAN.Top += 2;        //for bottom collision
+                moveUp = false;
+                moveDown = false;
+                moveLeft = false;
+                moveRight = false;
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label6.Bounds) && moveRight == true)
+            {
+                pbPACMAN.Left -= 2;       //for left collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = true; moveDown = false; moveLeft = false; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = true; moveLeft = false; moveRight = false;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label6.Bounds) && moveLeft == true)
+            {
+                pbPACMAN.Left += 2;       //for right collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = true; moveDown = false; moveLeft = false; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = true; moveLeft = false; moveRight = false;
+                }
+            }
+
+
+
+            //label7
+            if (pbPACMAN.Bounds.IntersectsWith(label7.Bounds) && moveDown == true)
+            {
+                pbPACMAN.Top -= 2;        //for top collision
+                moveUp = false;
+                moveDown = false;
+                moveLeft = false;
+                moveRight = false;
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label7.Bounds) && moveUp == true)
+            {
+                pbPACMAN.Top += 2;        //for bottom collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label7.Bounds) && moveRight == true)
+            {
+                pbPACMAN.Left -= 2;       //for left collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = true; moveDown = false; moveLeft = false; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = true; moveLeft = false; moveRight = false;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label7.Bounds) && moveLeft == true)
+            {
+                pbPACMAN.Left += 2;       //for right collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = true; moveDown = false; moveLeft = false; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = true; moveLeft = false; moveRight = false;
+                }
+            }
+
+
+
+            //label8
+            if (pbPACMAN.Bounds.IntersectsWith(label8.Bounds) && moveDown == true)
+            {
+                pbPACMAN.Top -= 2;        //for top collision
+                moveUp = false;
+                moveDown = false;
+                moveLeft = false;
+                moveRight = false;
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label8.Bounds) && moveUp == true)
+            {
+                pbPACMAN.Top += 2;        //for bottom collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label8.Bounds) && moveRight == true)
+            {
+                pbPACMAN.Left -= 2;       //for left collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = true; moveDown = false; moveLeft = false; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = true; moveLeft = false; moveRight = false;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label8.Bounds) && moveLeft == true)
+            {
+                pbPACMAN.Left += 2;       //for right collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = true; moveDown = false; moveLeft = false; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = true; moveLeft = false; moveRight = false;
+                }
+            }
+
+
+
+            //label9
+            if (pbPACMAN.Bounds.IntersectsWith(label9.Bounds) && moveDown == true)
+            {
+                pbPACMAN.Top -= 2;        //for top collision
+                moveUp = false;
+                moveDown = false;
+                moveLeft = false;
+                moveRight = false;
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label9.Bounds) && moveUp == true)
+            {
+                pbPACMAN.Top += 2;        //for bottom collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label9.Bounds) && moveRight == true)
+            {
+                pbPACMAN.Left -= 2;       //for left collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = true; moveDown = false; moveLeft = false; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = true; moveLeft = false; moveRight = false;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label9.Bounds) && moveLeft == true)
+            {
+                pbPACMAN.Left += 2;       //for right collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = true; moveDown = false; moveLeft = false; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = true; moveLeft = false; moveRight = false;
+                }
+            }
+
+
+
+            //label10
+            if (pbPACMAN.Bounds.IntersectsWith(label10.Bounds) && moveDown == true)
+            {
+                pbPACMAN.Top -= 2;        //for top collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label10.Bounds) && moveUp == true)
+            {
+                pbPACMAN.Top += 2;        //for bottom collision
+                moveUp = false;
+                moveDown = false;
+                moveLeft = false;
+                moveRight = false;
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label10.Bounds) && moveRight == true)
+            {
+                pbPACMAN.Left -= 2;       //for left collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = true; moveDown = false; moveLeft = false; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = true; moveLeft = false; moveRight = false;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label10.Bounds) && moveLeft == true)
+            {
+                pbPACMAN.Left += 2;       //for right collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = true; moveDown = false; moveLeft = false; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = true; moveLeft = false; moveRight = false;
+                }
+            }
+
+
+
+            //label11
+            if (pbPACMAN.Bounds.IntersectsWith(label11.Bounds) && moveDown == true)
+            {
+                pbPACMAN.Top -= 2;        //for top collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label11.Bounds) && moveUp == true)
+            {
+                pbPACMAN.Top += 2;        //for bottom collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label11.Bounds) && moveRight == true)
+            {
+                pbPACMAN.Left -= 2;       //for left collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = true; moveDown = false; moveLeft = false; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = true; moveLeft = false; moveRight = false;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label11.Bounds) && moveLeft == true)
+            {
+                pbPACMAN.Left += 2;       //for right collision
+                moveUp = false;
+                moveDown = false;
+                moveLeft = false;
+                moveRight = false;
+            }
+
+
+            //label12
+            if (pbPACMAN.Bounds.IntersectsWith(label12.Bounds) && moveDown == true)
+            {
+                pbPACMAN.Top -= 2;        //for top collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label12.Bounds) && moveUp == true)
+            {
+                pbPACMAN.Top += 2;        //for bottom collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label12.Bounds) && moveRight == true)
+            {
+                pbPACMAN.Left -= 2;       //for left collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = true; moveDown = false; moveLeft = false; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = true; moveLeft = false; moveRight = false;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label12.Bounds) && moveLeft == true)
+            {
+                pbPACMAN.Left += 2;       //for right collision
+                moveUp = false;
+                moveDown = false;
+                moveLeft = false;
+                moveRight = false;
+            }
+
+
+
+            //label13
+            if (pbPACMAN.Bounds.IntersectsWith(label13.Bounds) && moveDown == true)
+            {
+                pbPACMAN.Top -= 2;        //for top collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label13.Bounds) && moveUp == true)
+            {
+                pbPACMAN.Top += 2;        //for bottom collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label13.Bounds) && moveRight == true)
+            {
+                pbPACMAN.Left -= 2;       //for left collision
+                moveUp = false;
+                moveDown = false;
+                moveLeft = false;
+                moveRight = false;
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label13.Bounds) && moveLeft == true)
+            {
+                pbPACMAN.Left += 2;       //for right collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = true; moveDown = false; moveLeft = false; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = true; moveLeft = false; moveRight = false;
+                }
+            }
+
+
+
+
+            //label14
+            if (pbPACMAN.Bounds.IntersectsWith(label14.Bounds) && moveDown == true)
+            {
+                pbPACMAN.Top -= 2;        //for top collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label14.Bounds) && moveUp == true)
+            {
+                pbPACMAN.Top += 2;        //for bottom collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label14.Bounds) && moveRight == true)
+            {
+                pbPACMAN.Left -= 2;       //for left collision
+                moveUp = false;
+                moveDown = false;
+                moveLeft = false;
+                moveRight = false;
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label14.Bounds) && moveLeft == true)
+            {
+                pbPACMAN.Left += 2;       //for right collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = true; moveDown = false; moveLeft = false; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = true; moveLeft = false; moveRight = false;
+                }
+            }
+
+
+            //label15
+            if (pbPACMAN.Bounds.IntersectsWith(label15.Bounds) && moveDown == true)
+            {
+                pbPACMAN.Top -= 2;        //for top collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label15.Bounds) && moveUp == true)
+            {
+                pbPACMAN.Top += 2;        //for bottom collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label15.Bounds) && moveRight == true)
+            {
+                pbPACMAN.Left -= 2;       //for left collision
+                moveUp = false;
+                moveDown = false;
+                moveLeft = false;
+                moveRight = false;
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label15.Bounds) && moveLeft == true)
+            {
+                pbPACMAN.Left += 2;       //for right collision
+                moveUp = false;
+                moveDown = false;
+                moveLeft = false;
+                moveRight = false;
+            }
+
+
+
+            //label16
+            if (pbPACMAN.Bounds.IntersectsWith(label16.Bounds) && moveDown == true)
+            {
+                pbPACMAN.Top -= 2;        //for top collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label16.Bounds) && moveUp == true)
+            {
+                pbPACMAN.Top += 2;        //for bottom collision
+                Random rng = new Random();
+                int dice = rng.Next(1, 3);
+                if (dice == 1)
+                {
+                    moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                }
+                else
+                {
+                    moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                }
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label16.Bounds) && moveRight == true)
+            {
+                pbPACMAN.Left -= 2;       //for left collision
+                moveUp = false;
+                moveDown = false;
+                moveLeft = false;
+                moveRight = false;
+            }
+            if (pbPACMAN.Bounds.IntersectsWith(label16.Bounds) && moveLeft == true)
+            {
+                pbPACMAN.Left += 2;       //for right collision
+                moveUp = false;
+                moveDown = false;
+                moveLeft = false;
+                moveRight = false;
+            }
+
+
+
+
+
+
+
+
+
+
+          
+
+            //void movingLeftCollision(label something)
+            //{
+            //    if(moveRight == true && pbPACMAN.Bounds.IntersectsWith(something.Bounds))
+            //    pbPACMAN.Left -= 2;       //for left collision
+            //    moveUp = false;
+            //    moveDown = false;
+            //    moveLeft = false;
+            //    moveRight = false;
+            //}
+        }
+
+
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ //pacmans wall collisions
+                    if (pbPACMAN.Bounds.IntersectsWith(x.Bounds))
+                    {
+                        //for bottom collision
+                        if (pbPACMAN.Bounds.IntersectsWith(x.Bounds) && moveUp == true)
+                        {
+                            pbPACMAN.Top += 2;        
+                            Random rng = new Random();
+                            int dice = rng.Next(1, 3);
+                            if (dice == 1)
+                            {
+                                moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                            }
+                            else
+                            {
+                                moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                            }
+                        }
+
+                        //for top collision
+                        if (pbPACMAN.Bounds.IntersectsWith(x.Bounds) && moveDown == true)
+                        {
+                            pbPACMAN.Top -= 2;        
+                            Random rng = new Random();
+                            int dice = rng.Next(1, 3);
+                            if (dice == 1)
+                            {
+                                moveUp = false; moveDown = false; moveLeft = true; moveRight = false;
+                            }
+                            else
+                            {
+                                moveUp = false; moveDown = false; moveLeft = false; moveRight = true;
+                            }
+                        }
+
+                        //for right collision
+                        if (pbPACMAN.Bounds.IntersectsWith(x.Bounds) && moveLeft == true)
+                        {
+                            pbPACMAN.Left += 2;       
+                            Random rng = new Random();
+                            int dice = rng.Next(1, 3);
+                            if (dice == 1)
+                            {
+                                moveUp = true; moveDown = false; moveLeft = false; moveRight = false;
+                            }
+                            else
+                            {
+                                moveUp = false; moveDown = true; moveLeft = false; moveRight = false;
+                            }
+                        }
+
+                        //for left collision
+                        if (pbPACMAN.Bounds.IntersectsWith(x.Bounds) && moveRight == true)
+                        {
+                            pbPACMAN.Left -= 2;       
+                            Random rng = new Random();
+                            int dice = rng.Next(1, 3);
+                            if (dice == 1)
+                            {
+                                moveUp = true; moveDown = false; moveLeft = false; moveRight = false;
+                            }
+                            else
+                            {
+                                moveUp = false; moveDown = true; moveLeft = false; moveRight = false;
+                            }
+                        }
+                    }
